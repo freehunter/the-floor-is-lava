@@ -20,6 +20,9 @@ var mainState = {
         
         //load the lava
         game.load.image('lava', 'assets/lava.png');
+        
+        //load the boundry wall
+        //game.load.image('wall', 'assets/wall.png');
     },
 
     // Fuction called after 'preload' to setup the game 
@@ -55,8 +58,13 @@ var mainState = {
         //create the lava group
         this.lava = game.add.group();
         this.lava.enableBody = true;
-        this.floor = this.lava.create(400,400, 'lava')
+        this.floor = this.lava.create(0,465, 'lava')
 
+        //create a boundry to push the player
+       // this.wall = game.add.group();
+        //this.wall.enableBody = true;
+        //this.boundry = this.wall.create(-25,0, 'wall')
+        
         // Add a score label on the top left of the screen
         this.score = 0;
         this.labelScore = this.game.add.text(20, 20, "0", { font: "30px Arial", fill: "#ffffff" });  
@@ -65,11 +73,11 @@ var mainState = {
     // This function is called 60 times per second
     update: function() {
         // If the player is out of the world (too high or too low), call the 'restartGame' function
-        if (this.player.inWorld == false)
+         if (this.player.inWorld == false)
             this.restartGame(); 
 
-        // If the player overlap any platforms, call 'restartGame'
-        //game.physics.arcade.overlap(this.player, this.platforms, this.restartGame, null, this);      
+        // If the player overlaps the lava, call 'restartGame'
+        game.physics.arcade.overlap(this.player, this.lava, this.restartGame, null, this);      
         game.physics.arcade.collide(this.player, this.platforms);
         game.physics.arcade.collide(this.player, this.starting);
         //platform.body.drag.setTo(10000);
