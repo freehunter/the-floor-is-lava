@@ -41,8 +41,15 @@ var mainState = {
 
         // Call the 'jump' function when the spacekey is hit (or mouse click or screen tap)
         var spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-        game.input.onDown.add(this.jump, this);
-        spaceKey.onDown.add(this.jump, this); 
+       // game.input.onDown.add(this.jump, this);
+        this.input.onDown.add(this.jump, this);
+        //game.input.isDown.add(this.jump, this);
+        //spaceKey.onDown.add(this.jump, this); 
+        //this.onTap.add(this.jump, this);
+       // if this.target.activePointer.isDown
+        //{
+        //    this.jump, this;
+       // }
 
         // Create a group of 20 platforms
         this.platforms = game.add.group();
