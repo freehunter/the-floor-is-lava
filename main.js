@@ -1,14 +1,16 @@
 // Initialize Phaser, and creates a 400x490px game
 var game = new Phaser.Game(400, 490, Phaser.AUTO, 'gameDiv');
 
-//set double jump
-this.jump_set = 0;
+
 
 // Creates a new 'main' state that will contain the game
 var mainState = {
-
+    
     // Function called first to load all the assets
     preload: function() { 
+        
+        //set double jump
+        this.jump_set = 3;
         // Change the background color of the game
         game.stage.backgroundColor = '#71c5cf';
 
@@ -37,19 +39,18 @@ var mainState = {
         
         // Add gravity to the player to make it fall
         game.physics.arcade.enable(this.player);
-        this.player.body.gravity.y = 350; 
+        this.player.body.gravity.y = 400; 
 
-        // Call the 'jump' function when the spacekey is hit (or mouse click or screen tap)
-        var spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-       // game.input.onDown.add(this.jump, this);
+        // Call the 'jump' function when the spacekey is hit (not used in this game)
+        //var spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        
+        //this works for clicking mouse and touching a screen
         this.input.onDown.add(this.jump, this);
+        
+        //none of this shit works for phone touch events
         //game.input.isDown.add(this.jump, this);
         //spaceKey.onDown.add(this.jump, this); 
         //this.onTap.add(this.jump, this);
-       // if this.target.activePointer.isDown
-        //{
-        //    this.jump, this;
-       // }
 
         // Create a group of 20 platforms
         this.platforms = game.add.group();
@@ -57,10 +58,11 @@ var mainState = {
         this.platforms.createMultiple(20, 'platform'); 
         
         //create the starting platform
-        this.starting = this.platforms.create(50, 150, 'platform')
+        this.starting = this.platforms.create(50, 400, 'platform')
+        this.starting.body.immovable = true;
 
-        // Timer that calls 'addRowOfplatforms' every 1.5 seconds
-        this.timer = this.game.time.events.loop(1500, this.addRowOfplatforms, this);  
+        // Timer that calls 'addRowOfplatforms' every x milliseconds
+        this.timer = this.game.time.events.loop(1300, this.addRowOfplatforms, this);  
         
         //create the lava group
         this.lava = game.add.group();
@@ -75,6 +77,10 @@ var mainState = {
         // Add a score label on the top left of the screen
         this.score = 0;
         this.labelScore = this.game.add.text(20, 20, "0", { font: "30px Arial", fill: "#ffffff" });  
+        
+        //show number of jumps left in top right of the screen
+        this.labelJumps = this.game.add.text(350, 20, "0", { font: "30px Arial", fill: "#ffffff" }); 
+        this.labelJumps.text = this.jump_set;
     },
 
     // This function is called 60 times per second
@@ -87,27 +93,34 @@ var mainState = {
         game.physics.arcade.overlap(this.player, this.lava, this.restartGame, null, this);      
         game.physics.arcade.collide(this.player, this.platforms);
         game.physics.arcade.collide(this.player, this.starting);
+        game.physics.arcade.collide(this.starting, this.platforms, this.platfall, null, this);
         //platform.body.drag.setTo(10000);
         
         //animate the player
         this.player.animations.play('right');
+        
+        //debug to find height of player
+        console.log(this.player.y)
+        
     },
 
     // Make the player jump 
     jump: function() {
         // Add a vertical velocity to the player
-        if (this.player.body.touching.down || this.jump_set === 0)
+        if (this.player.body.touching.down || this.jump_set > 0)
         {
             this.player.body.velocity.y = -250;
-            this.jump_set = 1;
+            this.jump_set -= 1;
+            this.labelJumps.text = this.jump_set;
+            
         }
         
         //if the player touches a block, add one to the score
         //reset the double jump
-        if (this.player.body.touching.down || this.jump_set === 0)
+        if (this.player.body.touching.down && this.player.y < 352)
         {
-            this.score += 1;
-            this.jump_set = 0;
+            this.score += parseInt(1 * (this.player.body.y / 100));
+            this.jump_set = 3;
             this.labelScore.text = this.score;
         }
     },
@@ -116,6 +129,10 @@ var mainState = {
     restartGame: function() {
         // Start the 'main' state, which restarts the game
         game.state.start('main');
+    },
+    
+    platfall: function() {
+        this.starting.body.immovable = false;
     },
 
     // Add a platform on the screen
@@ -142,7 +159,7 @@ var mainState = {
             if (i != hole && i != hole +1 && i != hole -1) 
                 //(pop-in distance to next platform, i*height+starting coordinate)
                 //this.addOneplatform(400, i*60+200);   
-                this.addOneplatform(400, i*60+(Math.random()*(450-300) + 300));
+                this.addOneplatform(400, i*60+(Math.random()*(390-200) + 200));
     },
 };
 
