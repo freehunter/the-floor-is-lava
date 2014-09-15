@@ -76,10 +76,13 @@ var mainState = {
         
         // Add a score label on the top left of the screen
         this.score = 0;
-        this.labelScore = this.game.add.text(20, 20, "0", { font: "30px Arial", fill: "#ffffff" });  
+        this.labelScoretxt = this.game.add.text(20, 10, "Score", { font: "30px Arial", fill: "#ffffff" });  
+        this.labelScore = this.game.add.text(50, 40, "0", { font: "30px Arial", fill: "#ffffff" });  
+        this.labelScore.anchor.setTo(0.1, 0.1);
         
         //show number of jumps left in top right of the screen
-        this.labelJumps = this.game.add.text(350, 20, "0", { font: "30px Arial", fill: "#ffffff" }); 
+        this.labelJumps = this.game.add.text(340, 40, "0", { font: "30px Arial", fill: "#ffffff" }); 
+        this.labelJumpstxt = this.game.add.text(300, 10, "Jumps", { font: "30px Arial", fill: "#ffffff" });  
         this.labelJumps.text = this.jump_set;
     },
 
@@ -93,8 +96,10 @@ var mainState = {
         game.physics.arcade.overlap(this.player, this.lava, this.restartGame, null, this);      
         game.physics.arcade.collide(this.player, this.platforms);
         game.physics.arcade.collide(this.player, this.starting);
+        
+        //make starting platform fall if hit by another platform
         game.physics.arcade.collide(this.starting, this.platforms, this.platfall, null, this);
-        //platform.body.drag.setTo(10000);
+
         
         //animate the player
         this.player.animations.play('right');
@@ -119,9 +124,23 @@ var mainState = {
         //reset the double jump
         if (this.player.body.touching.down && this.player.y < 352)
         {
-            this.score += parseInt(1 * (this.player.body.y / 100));
+            //scoring based on height of platform (not used)
+            //this.score += parseInt(1 * (this.player.body.y / 100));
+            //scoring based on how many platforms jumped
+            this.score += 2;
             this.jump_set = 3;
+            this.labelJumps.text = this.jump_set;
             this.labelScore.text = this.score;
+            if (this.score === 4)
+            {
+                this.platfall();
+            }
+            //if the score is double digits, move the counter over
+            if (this.score > 9)
+            {
+                this.labelScore.destroy();
+                this.labelScore = this.game.add.text(40, 40, this.score, { font: "30px Arial", fill: "#ffffff" });
+            }
         }
     },
 
@@ -159,7 +178,7 @@ var mainState = {
             if (i != hole && i != hole +1 && i != hole -1) 
                 //(pop-in distance to next platform, i*height+starting coordinate)
                 //this.addOneplatform(400, i*60+200);   
-                this.addOneplatform(400, i*60+(Math.random()*(390-200) + 200));
+                this.addOneplatform(400, i*60+(Math.random()*(350-250) + 250));
     },
 };
 
