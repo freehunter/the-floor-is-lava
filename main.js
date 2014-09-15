@@ -1,7 +1,29 @@
 // Initialize Phaser, and creates a 400x490px game
 //var game = new Phaser.Game(400, 490, Phaser.AUTO, 'gameDiv');
-var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.canvas, '');
 
+/*
+//hack to work on multiple screen sizes... i didnt have much luck
+var w = window.innerWidth * window.devicePixelRatio,
+h = window.innerHeight * window.devicePixelRatio,
+width = (h > w) ? h : w,
+height = (h > w) ? w : h;
+
+// Hack to avoid iPad Retina and large Android devices. Tell it to scale up.
+if (window.innerWidth >= 1024 && window.devicePixelRatio >= 2)
+    {
+        width = Math.round(width / 2);
+        height = Math.round(height / 2);
+    }
+
+// reduce screen size by one 3rd on devices like Nexus 5
+if (window.devicePixelRatio === 3)
+    {
+        width = Math.round(width / 3) * 2;
+        height = Math.round(height / 3) * 2;
+    }
+*/
+
+var game = new Phaser.Game(400, 490, Phaser.CANVAS, 'gameDiv');
 
 
 // Creates a new 'main' state that will contain the game
@@ -30,6 +52,14 @@ var mainState = {
 
     // Fuction called after 'preload' to setup the game 
     create: function() { 
+        
+        //set scaling
+        //game.scale.hasResized.add(function() { window.AutoScaler('romeocat-game', 960, 600); });
+        game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;    
+        game.scale.setShowAll();
+        game.scale.setScreenSize(true);
+        game.scale.refresh();
+        
         // Set the physics system
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
