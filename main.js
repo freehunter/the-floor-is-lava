@@ -59,12 +59,12 @@ var mainState = {
         // Create a group of 20 platforms
         this.platforms = game.add.group();
         this.platforms.enableBody = true;
-        this.platforms.createMultiple(20, 'platform');
+        this.platforms.createMultiple(10, 'platform');
 
 		// Create a group of clouds
         this.clouds = game.add.group();
         this.clouds.enableBody = true;
-        this.clouds.createMultiple(20, 'cloud');		
+        this.clouds.createMultiple(10, 'cloud');		
         
         //create the starting platform
         this.starting = this.platforms.create(50, 400, 'platform')
@@ -80,11 +80,6 @@ var mainState = {
         this.lava = game.add.group();
         this.lava.enableBody = true;
         this.floor = this.lava.create(0,465, 'lava')
-
-        //create a boundry to push the player
-       // this.wall = game.add.group();
-        //this.wall.enableBody = true;
-        //this.boundry = this.wall.create(-25,0, 'wall')
         
         // Add a score label on the top left of the screen
         this.score = 0;
@@ -194,13 +189,11 @@ var mainState = {
 
     // Add a platform at a random height
     addRowOfplatforms: function() {
-        this.addOneplatform(450, (Math.random()*(350-250) + 250));
+        this.addOneplatform(400, (Math.random()*(350-250) + 250));
     },
 	
 	// Add a cloud on the screen
     addOneCloud: function(x, y) {
-		console.log(x);
-		console.log(y);
         // Get the first dead cloud of our group
         var clouds = this.clouds.getFirstDead();
 
@@ -217,7 +210,7 @@ var mainState = {
 
     // Add a cloud at a random height
     addRowOfclouds: function() {
-        this.addOneCloud(500, (Math.random()*(150-10) + 10));
+        this.addOneCloud(400, (Math.random()*(150-10) + 10));
     },
 };
 
