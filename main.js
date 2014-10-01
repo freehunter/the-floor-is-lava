@@ -42,6 +42,9 @@ var mainState = {
 
         // Load the platform sprite
         game.load.image('platform', 'assets/platform.png');    
+		
+		// Load the cloud sprite
+        game.load.image('cloud', 'assets/cloud.png'); 
         
         //load the lava
         game.load.image('lava', 'assets/lava.png');
@@ -50,7 +53,7 @@ var mainState = {
         //game.load.image('wall', 'assets/wall.png');
     },
 
-    // Fuction called after 'preload' to setup the game 
+    // Function called after 'preload' to setup the game 
     create: function() { 
         
         //set scaling
@@ -62,15 +65,6 @@ var mainState = {
         
         // Set the physics system
         game.physics.startSystem(Phaser.Physics.ARCADE);
-
-        // Display the player on the screen
-        this.player = this.game.add.sprite(100, 100, 'player');
-        this.player.animations.add('left', [0, 1, 2, 3], 10, true);
-        this.player.animations.add('right', [5, 6, 7, 8], 10, true);
-        
-        // Add gravity to the player to make it fall
-        game.physics.arcade.enable(this.player);
-        this.player.body.gravity.y = 400; 
 
         // Call the 'jump' function when the spacekey is hit (not used in this game)
         //var spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -86,7 +80,12 @@ var mainState = {
         // Create a group of 20 platforms
         this.platforms = game.add.group();
         this.platforms.enableBody = true;
-        this.platforms.createMultiple(20, 'platform'); 
+        this.platforms.createMultiple(20, 'platform');
+
+		// Create a group of clouds
+        this.clouds = game.add.group();
+        this.clouds.enableBody = true;
+        this.clouds.createMultiple(20, 'cloud');		
         
         //create the starting platform
         this.starting = this.platforms.create(50, 400, 'platform')
@@ -94,6 +93,9 @@ var mainState = {
 
         // Timer that calls 'addRowOfplatforms' every x milliseconds
         this.timer = this.game.time.events.loop(1300, this.addRowOfplatforms, this);  
+		
+		// Timer that calls 'addRowOfplatforms' every x milliseconds
+        this.timer = this.game.time.events.loop(1300, this.addRowOfclouds, this); 
         
         //create the lava group
         this.lava = game.add.group();
@@ -115,6 +117,15 @@ var mainState = {
         this.labelJumps = this.game.add.text(340, 40, "0", { font: "30px Arial", fill: "#ffffff" }); 
         this.labelJumpstxt = this.game.add.text(300, 10, "Jumps", { font: "30px Arial", fill: "#ffffff" });  
         this.labelJumps.text = this.jump_set;
+		
+		// Display the player on the screen
+        this.player = this.game.add.sprite(100, 100, 'player');
+        this.player.animations.add('left', [0, 1, 2, 3], 10, true);
+        this.player.animations.add('right', [5, 6, 7, 8], 10, true);
+        
+        // Add gravity to the player to make it fall
+        game.physics.arcade.enable(this.player);
+        this.player.body.gravity.y = 400; 
     },
 
     // This function is called 60 times per second
@@ -136,7 +147,7 @@ var mainState = {
         this.player.animations.play('right');
         
         //debug to find height of player
-        console.log(this.player.y)
+        //console.log(this.player.y)
         
     },
 
@@ -162,7 +173,7 @@ var mainState = {
             this.jump_set = 3;
             this.labelJumps.text = this.jump_set;
             this.labelScore.text = this.score;
-            if (this.score === 4)
+            if (this.score === 1)
             {
                 this.platfall();
             }
@@ -182,6 +193,7 @@ var mainState = {
     },
     
     platfall: function() {
+	//make sure the starting platform can fall
         this.starting.body.immovable = false;
     },
 
@@ -194,22 +206,39 @@ var mainState = {
         platform.reset(x, y);
 
         // Add velocity to the platform to make it move left
-        platform.body.velocity.x = (-250 - (this.score * 2)); 
+        platform.body.velocity.x = (-250 - (this.score * 10)); 
                
         // Kill the platform when it's no longer visible 
         platform.checkWorldBounds = true;
         platform.outOfBoundsKill = true;
     },
 
-    // Add a row of 6 platforms with a hole somewhere in the middle
+    // Add a platform at a random height
     addRowOfplatforms: function() {
-        var hole = Math.floor(Math.random()*5)+1;
-        
-        for (var i = 0; i < 1; i++)
-            if (i != hole && i != hole +1 && i != hole -1) 
-                //(pop-in distance to next platform, i*height+starting coordinate)
-                //this.addOneplatform(400, i*60+200);   
-                this.addOneplatform(400, i*60+(Math.random()*(350-250) + 250));
+        this.addOneplatform(450, (Math.random()*(350-250) + 250));
+    },
+	
+	// Add a cloud on the screen
+    addOneCloud: function(x, y) {
+		console.log(x);
+		console.log(y);
+        // Get the first dead cloud of our group
+        var clouds = this.clouds.getFirstDead();
+
+        // Set the new position of the platform
+        clouds.reset(x, y);
+
+        // Add velocity to the cloud to make it move left
+        clouds.body.velocity.x = (-200); 
+               
+        // Kill the cloud when it's no longer visible 
+        clouds.checkWorldBounds = true;
+        clouds.outOfBoundsKill = true;
+    },
+
+    // Add a cloud at a random height
+    addRowOfclouds: function() {
+        this.addOneCloud(500, (Math.random()*(150-10) + 10));
     },
 };
 
