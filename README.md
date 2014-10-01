@@ -8,7 +8,7 @@ The floor is lava. Don't touch it!
 Infinite running side-scroller.
 Jump from platform to platform as they collapse under you.
 
-Space, click, or tap to jump
+Space, click, or tap to jump  
 Every time you touch a platform, you can double jump
 
 TODO:
