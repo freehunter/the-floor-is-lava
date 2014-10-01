@@ -59,12 +59,12 @@ var mainState = {
         // Create a group of 20 platforms
         this.platforms = game.add.group();
         this.platforms.enableBody = true;
-        this.platforms.createMultiple(10, 'platform');
+        this.platforms.createMultiple(4, 'platform');
 
 		// Create a group of clouds
         this.clouds = game.add.group();
         this.clouds.enableBody = true;
-        this.clouds.createMultiple(10, 'cloud');		
+        this.clouds.createMultiple(4, 'cloud');		
         
         //create the starting platform
         this.starting = this.platforms.create(50, 400, 'platform')
