@@ -16,3 +16,5 @@ Replace platform models with solid colors
 Make original sprite for player  
 Add basic sounds  
 Show highest score above starting platform when beginning game  
+
+Game made in Phaser.js using a lot of aart ssets bundled with Phaser.js.
