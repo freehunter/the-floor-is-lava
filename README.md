@@ -15,7 +15,7 @@ Every time you touch a platform, you can triple jump
 
 TODO:  
 Add basic sounds  
-Accumulate points and spend on upgrades
+Accumulate points and spend on upgrades  
 Add brief instructions at start
 
 Game made in Phaser.js
