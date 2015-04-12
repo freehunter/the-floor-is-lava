@@ -1,7 +1,7 @@
 the-floor-is-lava
 =================
 
-v0.5
+v0.8
 
 The floor is lava. Don't touch it!
 
@@ -12,9 +12,7 @@ Space, click, or tap to jump
 Every time you touch a platform, you can double jump
 
 TODO:  
-Replace platform models with solid colors  
-Make original sprite for player  
 Add basic sounds  
 Show highest score above starting platform when beginning game  
 
-Game made in Phaser.js using a lot of aart ssets bundled with Phaser.js.
+Game made in Phaser.js
