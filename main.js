@@ -94,7 +94,7 @@ var mainState = {
 		
 		// Display the player on the screen
         this.player = this.game.add.sprite(100, 100, 'player');
-        this.player.animations.add('left', [0, 1, 2, 3], 10, true);
+        //this.player.animations.add('left', [0, 1, 2, 3], 10, true);
         this.player.animations.add('right', [5, 6, 7, 8], 10, true);
         
         // Add gravity to the player to make it fall
