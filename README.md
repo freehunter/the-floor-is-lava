@@ -1,4 +1,4 @@
-the-floor-is-lava
+The Floor is Lava
 =================
 
 Playable at http://myname.website/lava
